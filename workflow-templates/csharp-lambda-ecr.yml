@@ -1,0 +1,28 @@
+name: "Build & Push Image"
+
+on:
+  push:
+    branches:
+      - $default-branch
+      - feature/*
+      - release/*
+      - hotfix/*
+      - develop
+  pull_request:
+    
+jobs:
+  data-setup:
+    uses: holdbar-com/workflows/.github/workflows/repo-data.yml@d469f7c1e6e3b3c67a57d75303fe8a916ea80954
+  lambda-ecr:
+    needs: [data-setup]
+    uses: holdbar-com/workflows/.github/workflows/lambda-netcore-ecr.yml@d469f7c1e6e3b3c67a57d75303fe8a916ea80954
+    with:
+      nuget_username: ${{ github.actor }}
+      ecr_repository_name: ${{ needs.data-setup.outputs.repository_name }}
+      image_tag_prefix: ${{ needs.data-setup.outputs.image_tag_prefix }}
+    secrets:
+      myget_nuget_apikey: ${{ secrets.TRUESTORY_MYGET_NUGET_APIKEY }}
+      nuget_auth_token: ${{ secrets.NUGET_AUTH_TOKEN }}
+      aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      aws_region: ${{ secrets.AWS_DEFAULT_REGION }}

@@ -1,0 +1,12 @@
+{
+    "name": "Holdbar C# Lambda Workflow",
+    "description": "Starter workflow for setting up automated building of Docker Images for use with AWS Lambda functions.",
+    "iconName": "holdbar-logo-square",
+    "categories": [
+        "C#"
+    ],
+    "filePatterns": [
+        "^Dockerfile",
+        ".*\\.sln$"
+    ]
+}
